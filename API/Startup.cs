@@ -18,6 +18,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IProductRepository, ProductRepository>(); // AddScoped means it will be disposed after use which is the best (better than singleton which will remain for the shutting down of the app)
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); // this is different because we are adding a generic repository
 
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => x.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
