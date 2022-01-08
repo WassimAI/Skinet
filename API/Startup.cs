@@ -1,3 +1,4 @@
+using API.Helpers;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace API
         {
             services.AddScoped<IProductRepository, ProductRepository>(); // AddScoped means it will be disposed after use which is the best (better than singleton which will remain for the shutting down of the app)
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); // this is different because we are adding a generic repository
-
+            services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => x.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddSwaggerGen(c =>
@@ -28,7 +29,7 @@ namespace API
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline. --> Middlewares here
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -41,6 +42,7 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseStaticFiles(); // to read from static files (such as wwwroot)
 
             app.UseAuthorization();
 
