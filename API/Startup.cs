@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 using API.Middleware;
-=======
 using API.Helpers;
->>>>>>> 3fac6c29efd64f629ebcf37d37fe684b6bb07cc3
 using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
