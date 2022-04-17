@@ -1,9 +1,8 @@
 using API.Middleware;
 using API.Helpers;
-using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using API.Extensions;
 
 namespace API
 {
@@ -19,15 +18,13 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IProductRepository, ProductRepository>(); // AddScoped means it will be disposed after use which is the best (better than singleton which will remain for the shutting down of the app)
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); // this is different because we are adding a generic repository
+            
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => x.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
-            });
+            //modifying the builtg in ApiBehaviorOptions
+            services.AddApplicationServices();
+            services.AddSwaggerDocumentation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline. --> Middlewares here
@@ -37,8 +34,7 @@ namespace API
             if (env.IsDevelopment())
             {
                 //app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
+                app.UseSwaggerDocumentation();
             }
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
