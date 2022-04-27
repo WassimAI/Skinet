@@ -25,6 +25,13 @@ namespace API
             //modifying the builtg in ApiBehaviorOptions
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline. --> Middlewares here
@@ -44,6 +51,7 @@ namespace API
             app.UseRouting();
             app.UseStaticFiles(); // to read from static files (such as wwwroot)
 
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -22,7 +22,7 @@ namespace API.Middleware
         {
             try
             {
-                await _next(context); // if no exception the request till move to its next phase :)
+                await _next(context); // if no exception the request will move to its next phase :)
             }
             catch(Exception ex)
             {
