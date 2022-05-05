@@ -38,11 +38,11 @@ namespace API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMiddleware<ExceptionMiddleware>();
-            if (env.IsDevelopment())
-            {
-                //app.UseDeveloperExceptionPage();
-                app.UseSwaggerDocumentation();
-            }
+            // if (env.IsDevelopment())
+            // {
+            //     //app.UseDeveloperExceptionPage();
+            //     app.UseSwaggerDocumentation();
+            // }
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
@@ -53,6 +53,7 @@ namespace API
 
             app.UseCors("CorsPolicy");
             app.UseAuthorization();
+            app.UseSwaggerDocumentation();
 
             app.UseEndpoints(endpoints =>
             {
